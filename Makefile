@@ -1,6 +1,6 @@
 ################################################################
 ################################################################
-# Makefile for "biblatex-chem"                                 #
+# Makefile for "biblatex-nature"                               #
 ################################################################
 ################################################################
 
@@ -21,14 +21,14 @@ help:
 # Master package name                                        #
 ##############################################################
 
-PACKAGE = biblatex-chem
+PACKAGE = biblatex-nature
 
 ##############################################################
 # Directory structure for making zip files                   #
 ##############################################################
 
 CTANROOT := ctan
-CTANDIR  := $(CTANROOT)/biblatex-contrib/$(PACKAGE)
+CTANDIR  := $(CTANROOT)/$(PACKAGE)
 TDSDIR   := tds
 
 ##############################################################
@@ -38,7 +38,7 @@ TDSDIR   := tds
 INCLUDEPDF  := $(PACKAGE)
 INCLUDETEX  :=
 INCLUDETXT  := README
-PACKAGEROOT := latex/biblatex-contrib/$(PACKAGE)
+PACKAGEROOT := latex/$(PACKAGE)
 
 ##############################################################
 # Clean-up information                                       #
@@ -46,6 +46,8 @@ PACKAGEROOT := latex/biblatex-contrib/$(PACKAGE)
 
 AUXFILES = \
 	aux  \
+	bbl  \
+	blg \
 	cmds \
 	glo  \
 	gls  \
@@ -59,7 +61,6 @@ AUXFILES = \
 	toc  
 		
 CLEAN = \
-	bib \
 	gz  \
 	ins \
 	pdf \
@@ -67,13 +68,9 @@ CLEAN = \
 	txt \
 	zip 
 
-DOCS     = $(PACKAGE)    
-STYLES   = \
-  chem-acs     \
-  chem-angew   \
-  chem-biochem \
-  chem-rsc
-TDS      = latex/biblatex-contrib/$(PACKAGE)
+DOCS     = 
+STYLES   = nature
+TDS      = latex/$(PACKAGE)
 
 # Even if files exist, use the rules here
 
@@ -117,15 +114,15 @@ ctan: tds
 doc:
 	echo "Compling documents"
 	for I in $(DOCS) ; do \
-	  pdflatex -draftmode -nonstopmode $$I &> /dev/null ; \
+	  pdflatex -draftmode -interaction=nonstopmode $$I &> /dev/null ; \
 	  bibtex8 --wolfgang $$I               &> /dev/null ; \
 	  pdflatex -nonstopmode $$I            &> /dev/null ; \
 	  rm -rf $$I-blx.bib                                ; \
 	done
 	for I in $(STYLES) ; do \
-	  pdflatex -draftmode -nonstopmode style-$$I &> /dev/null ; \
+	  pdflatex -draftmode -interaction=nonstopmode style-$$I &> /dev/null ; \
 	  bibtex8 --wolfgang style-$$I               &> /dev/null ; \
-	  pdflatex -nonstopmode style-$$I            &> /dev/null ; \
+	  pdflatex -interaction=nonstopmode style-$$I            &> /dev/null ; \
 	  rm -rf style-$$I-blx.bib                                ; \
 	done
 	for I in $(AUXFILES) ; do \
