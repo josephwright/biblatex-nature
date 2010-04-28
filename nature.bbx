@@ -1,0 +1,569 @@
+\ProvidesFile{nature.bbx}
+[\blx@bbxid $Id: nature.bbx,v 0.8 2008/10/17 09:00:00 joseph beta $]
+
+\ExecuteBibliographyOptions{labelnumber,maxnames=5,useprefix=true}
+
+\newbibmacro*{begentry}{}
+\newbibmacro*{finentry}{\finentry}
+
+% The standard aliases
+
+\DeclareNameAlias{author}{default}
+\DeclareNameAlias{editor}{default}
+
+% Some basic formatting
+
+\DeclareFieldFormat{bibentrysetcount}{%
+  \mkbibparens{\mknumalph{#1}}}
+\DeclareFieldFormat{booktitle}{\mkbibemph{#1}} 
+\DeclareFieldFormat{doi}{%
+  doi\addcolon
+  \let\UrlFont\normalfont
+  \ifhyperref
+    {\href{http://dx.doi.org/#1}{\nolinkurl{#1}}}
+    {\nolinkurl{#1}}}
+\DeclareFieldFormat{labelnumberwidth}{#1\adddot\midsentence}
+\DeclareFieldFormat{maintitle}{\mkbibemph{#1}}    
+\DeclareFieldFormat{pages}{#1}
+\DeclareFieldFormat{parens}{\mkbibparens{#1}}
+\DeclareFieldFormat{shorthandwidth}{\mkbibbrackets{#1}}
+\DeclareFieldFormat{title}{\mkbibemph{#1}}
+\DeclareFieldFormat[article]{title}{#1\adddot}
+\DeclareFieldFormat[collection]{title}{\mkbibemph{#1}}
+\DeclareFieldFormat[thesis]{title}{\mkbibemph{#1}}
+\DeclareFieldFormat[patent]{type}{\ifbibstring{#1}{%
+  \mkbibemph{\bibstring{#1}}}{\mkbibemph{#1}}}
+\DeclareFieldFormat{url}{\let\UrlFont\normalfont<\url{#1}>}
+\DeclareFieldFormat[article]{volume}{\textbf{#1}}
+\DeclareFieldFormat[periodical]{volume}{\textbf{#1}}
+\DeclareFieldFormat{year}{#1}
+\DeclareFieldFormat[article]{year}{\mkbibparens{#1}}
+\DeclareFieldFormat[inproceedings]{year}{\mkbibparens{#1}}
+\DeclareFieldFormat[patent]{year}{\mkbibparens{#1}}
+\DeclareFieldFormat[proceedings]{year}{\mkbibparens{#1}}
+\DeclareFieldFormat[unpublished]{year}{\mkbibparens{#1}}
+
+\DeclareNameFormat{default}{%
+  \usebibmacro{name:last-first}{#1}{#4}{#5}{#7}%
+  \usebibmacro{name:andothers}}
+
+\renewcommand*{\thebibitem}{\item}
+\renewcommand*{\thelositem}{\item}
+\renewcommand*{\finalnamedelim}{\addspace\&\addspace}
+\renewcommand*{\mkbibnameaffix}[1]{\addspace#1}
+\renewcommand*{\newunitpunct}{\addspace}
+
+% The environments are set up correctly
+
+\renewenvironment*{thebibliography}
+  {\list
+     {\printfield[labelnumberwidth]{labelnumber}}
+     {\setlength{\labelwidth}{\labelnumberwidth}%
+      \setlength{\leftmargin}{\labelwidth}%
+      \setlength{\labelsep}{\biblabelsep}%
+      \addtolength{\leftmargin}{\labelsep}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}}%
+      \renewcommand*{\makelabel}[1]{\hss##1}}
+  {\endlist}
+
+\renewenvironment*{theshorthands}
+  {\list
+     {\printfield[shorthandwidth]{shorthand}}
+     {\setlength{\labelwidth}{\shorthandwidth}%
+      \setlength{\leftmargin}{\labelwidth}%
+      \setlength{\labelsep}{\biblabelsep}%
+      \addtolength{\leftmargin}{\labelsep}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}%
+      \renewcommand*{\makelabel}[1]{\hss##1}}}
+  {\endlist}
+
+% Some altered strings, in English at least
+   
+\DefineBibliographyStrings{english}{%
+  patentus    = {US Patent},
+  typeeditor  = {ed},
+  typeeditors = {eds}
+}
+
+% New and altered bibliography macros
+
+\newbibmacro*{chapter+pages}{%
+  \printfield{chapter}%
+  \newunit
+  \printfield{pages}%
+  \newunit}
+
+\renewbibmacro*{editor}{%
+  \ifthenelse{\ifuseeditor\AND\NOT\ifnameundef{editor}}
+    {\printtext[parens]{%
+       \usebibmacro{editorstrg}%
+       \newunit
+       \printnames{editor}}%     
+     \clearname{editor}}
+    {}}
+    
+\newbibmacro{in}{%
+  \bibstring{in}%
+  \newunit}
+  
+\newbibmacro*{institution+year}{%
+  \ifthenelse{\iffieldundef{year}\AND
+    \iffieldundef{institution}}
+    {}
+    {\printtext[parens]{%
+       \printlist{institution}%
+       \setunit*{\addcomma\addspace}%
+       \printfield{year}%
+    }}%
+  \newunit}
+
+\newbibmacro*{journal+volume+note}{%
+  \usebibmacro{journal}%
+  \newunit
+  \printfield{volume}%
+  \setunit*{\textbf{\addcomma}\addspace}%
+  \iffieldundef{note}
+    {}
+    {\printfield{note}%
+     \newunit}}
+ 
+\renewbibmacro*{maintitle}{%
+  \ifthenelse{\iffieldundef{maintitle}\AND
+    \iffieldundef{mainsubtitle}}
+    {}
+    {\printtext[maintitle]{%
+       \printfield[noformat]{maintitle}%
+       \addspace
+       \printfield[parens]{mainsubtitle}}%
+     \newunit}%
+  \printfield{maintitleaddon}%
+  \newunit}
+      
+\newbibmacro*{maintitle/booktitle}{%
+  \iffieldundef{maintitle}
+    {\usebibmacro{booktitle}}
+    {\usebibmacro{maintitle}}}
+    
+\newbibmacro*{maintitle+title}{%
+  \iffieldsequal{maintitle}{title}
+    {\clearfield{maintitle}%
+     \clearfield{mainsubtitle}%
+     \clearfield{maintitleaddon}}
+    {\iffieldundef{maintitle}
+       {}
+       {\usebibmacro{maintitle}%
+	\setunit*{\addcomma\addspace}}}%
+  \usebibmacro{title}%
+  \newunit}
+  
+\newbibmacro*{maintitle/title}{%
+  \iffieldsequal{maintitle}{title}
+    {\clearfield{maintitle}%
+     \clearfield{mainsubtitle}%
+     \clearfield{maintitleaddon}}
+    {}%
+  \iffieldundef{maintitle}
+    {\usebibmacro{title}}
+    {\usebibmacro{maintitle}}%
+  \newunit}
+     
+\renewbibmacro*{name:andothers}{%
+  \ifthenelse{\value{listcount}=\value{liststop}\AND
+              \ifmorenames}
+    {\ifnum\value{liststop}>1 \finalandcomma\fi
+     \andothersdelim\mkbibemph{\bibstring{andothers}}}
+    {}}
+
+\renewbibmacro*{name:last-first}[4]{%
+  \ifuseprefix
+    {\usebibmacro{name:delim}{#3#1}%
+     \usebibmacro{name:hook}{#3#1}%
+     \ifblank{#3}{}
+       {\mkbibnameprefix{#3\isdot}%
+        \ifpunctmark{'}{}{\addhighpenspace}}%
+     \mkbibnamelast{#1\isdot}%
+     \ifblank{#2}{}
+       {\addcomma\addlowpenspace
+        \mkbibnamefirst{#2}\isdot}%
+     \ifblank{#4}{}
+       {\addlowpenspace
+        \mkbibnameaffix{#4}\isdot}}
+    {\usebibmacro{name:delim}{#1}%
+     \usebibmacro{name:hook}{#1}%
+     \mkbibnamelast{#1}\isdot
+     \ifblank{#2#3}{}{\addcomma}%
+     \ifblank{#2}{}
+       {\addlowpenspace
+        \mkbibnamefirst{#2}\isdot}%
+     \ifblank{#3}{}
+       {\addlowpenspace
+        \mkbibnameprefix{#3}\isdot}%
+     \ifblank{#4}{}
+       {\addlowpenspace
+        \mkbibnameaffix{#4}\isdot}}} 
+
+\newbibmacro*{organization+year}{%
+  \ifthenelse{\iffieldundef{year}\AND
+    \iffieldundef{organization}}
+    {}
+    {\printtext[parens]{%
+       \printlist{organization}%
+       \setunit*{\addcomma\addspace}%
+       \printfield{year}%
+    }}%
+  \newunit}
+            
+\newbibmacro*{pages/doi}{%
+  \iffieldundef{pages}
+    {\printfield{doi}}
+    {\printfield{pages}}}
+    
+\newbibmacro*{publisher+year}{%
+  \printtext[parens]{%
+    \printlist{publisher}%
+    \setunit*{\addcomma\addspace}%
+    \printfield{year}%
+    \newunit}}
+
+% Drivers, edited from the standard versions, some quite heavily
+
+\DeclareBibliographyDriver{article}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \newunit
+  \usebibmacro{title}%
+  \newunit
+  \usebibmacro{journal+volume+note}%
+  \usebibmacro{pages/doi}%
+  \newunit
+  \printfield{year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{book}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \newunit
+  \usebibmacro{maintitle+title}%
+  \printfield{edition}%
+  \newunit
+  \usebibmacro{editor}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \printfield{pages}%
+  \newunit
+  \usebibmacro{publisher+year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{collection}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{maintitle+title}%
+  \printfield{edition}%
+  \newunit
+  \usebibmacro{editor}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \printfield{pages}%
+  \newunit
+  \usebibmacro{publisher+year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{inbook}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \newunit
+  \usebibmacro{in}%
+  \usebibmacro{bybookauthor}%
+  \newunit
+  \usebibmacro{maintitle/booktitle}%
+  \printfield{edition}%
+  \newunit
+  \usebibmacro{editor}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \printfield{pages}%
+  \newunit
+  \usebibmacro{publisher+year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{incollection}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \newunit
+  \usebibmacro{in}%
+  \usebibmacro{bybookauthor}%
+  \newunit
+  \usebibmacro{maintitle/booktitle}%
+  \printfield{edition}%
+  \newunit
+  \usebibmacro{editor}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \printfield{pages}%
+  \newunit
+  \usebibmacro{publisher+year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{inproceedings}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \newunit
+  \usebibmacro{in}%
+  \usebibmacro{booktitle}%
+  \newunit
+  \usebibmacro{editor}%
+  \newunit
+  \printfield{venue}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \usebibmacro{chapter+pages}%
+  \newunit
+  \printfield{year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{manual}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \newunit
+  \usebibmacro{title}%
+  \newunit
+  \printfield{edition}%
+  \newunit
+  \printfield{type}%
+  \newunit
+  \printfield{version}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \usebibmacro{chapter+pages}%
+  \newunit
+  \printfield{url}%
+  \newunit
+  \usebibmacro{organization+year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{misc}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \newunit
+  \usebibmacro{title}%
+  \newunit
+  \printfield{howpublished}%
+  \newunit
+  \printfield{type}%
+  \newunit
+  \printfield{version}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \printlist{location}%
+  \newunit
+  \printfield{doi}%
+  \newunit
+  \printfield{url}%
+  \newunit
+  \usebibmacro{organization+year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{online}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \newunit
+  \usebibmacro{title}%
+  \newunit
+  \printfield{version}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \printfield{url}%
+  \newunit
+  \usebibmacro{organization+year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{patent}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \newunit
+  \printfield{type}%
+  \newunit
+  \printfield{number}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \printfield{year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{periodical}{% 
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \printfield{issuetitle}%
+  \newunit
+  \usebibmacro{editor}%
+  \newunit
+  \printfield{edition}%
+  \newunit
+  \printfield{title}%
+  \newunit
+  \printfield{volume}%
+  \setunit*{\textbf{\addcomma}\addspace}%
+  \printfield{note}%
+  \newunit
+  \usebibmacro{chapter+pages}%
+  \newunit
+  \usebibmacro{publisher+year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{proceedings}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{maintitle/title}%
+  \newunit
+  \usebibmacro{editor}%
+  \newunit
+  \printfield{venue}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \usebibmacro{chapter+pages}%
+  \newunit
+  \printfield{year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{report}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \newunit
+  \usebibmacro{title}%
+  \newunit
+  \printfield{type}%
+  \newunit
+  \printfield{number}%
+  \newunit
+  \printfield{version}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \usebibmacro{chapter+pages}%
+  \newunit
+  \usebibmacro{institution+year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{thesis}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \newunit
+  \printfield{title}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \printfield{type}%
+  \newunit
+  \usebibmacro{chapter+pages}%
+  \newunit
+  \usebibmacro{institution+year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+\DeclareBibliographyDriver{unpublished}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \newunit
+  \printfield{journaltitle}%
+  \newunit
+  \printfield{howpublished}%
+  \newunit
+  \printfield{note}%
+  \newunit
+  \printfield{url}%
+  \newunit
+  \printfield{year}%
+  \newunit
+  \printfield{addendum}%
+  \newunit
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}}
+  
+% Some aliases
+
+\DeclareBibliographyAlias{review}{article}
+\DeclareBibliographyAlias{reference}{collection}
+\DeclareBibliographyAlias{inreference}{incollection}
+\DeclareBibliographyAlias{suppbook}{inbook}
+\DeclareBibliographyAlias{suppcollection}{incollection}
+\DeclareBibliographyAlias{suppperiodical}{article}
+  
+\endinput
