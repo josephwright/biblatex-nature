@@ -1,5 +1,9 @@
 @echo off
 
+  rem Make batch file for "biblatex-nature"
+
+  rem Default with no target is to give help   
+
   if not "%1" == "" goto :init
 
 :help
@@ -16,20 +20,19 @@
 
   setlocal
 
-  rem The name of the package to create should be set here: here, the
-  rem example package "testpkg" is in use
+  rem Master package name 
 
-  set PACKAGE=biblatex-nature
+  set PACKAGE=biblatex-ieee
 
   rem The biblatex styles included
 
-  set STYLES=nature
+  set STYLES=ieee
 
   rem The file types for inclusion in the archive files: note that a CTAN
   rem archive should not contain "unpacked" files. Typeset files and their
-  rem sources are not inlcuded here: they are dealt with separately
+  rem sources are not included here: they are dealt with separately
 
-  set CTANFILES=bbx cbx pdf tex
+  set CTANFILES=bbx bib cbx pdf tex
   set TDSFILES=%CTANFILES%
 
   rem Files to typeset
@@ -43,7 +46,7 @@
 
   rem The file types for inclusion in the archive files: note that a CTAN
   rem archive should not contain "unpacked" files. Typeset files and their
-  rem sources are not inlcuded here: they are dealt with separately
+  rem sources are not included here: they are dealt with separately
 
   set CTANFILES=bbx bib cbx pdf tex
   set TDSFILES=%CTANFILES%
@@ -115,10 +118,10 @@
 :doc 
 
   for %%I in (%STYLES%) do (
-    echo style-%%I
-    pdflatex style-%%I > nul
-    bibtex8 --wolfgang style-%%I > nul
-    pdflatex style-%%I > nul
+    echo biblatex-%%I
+    pdflatex biblatex-%%I > nul
+    bibtex8 --wolfgang biblatex-%%I > nul
+    pdflatex biblatex-%%I > nul
   )
 
   if exist *-blx.bib del *-blx.bib
@@ -129,9 +132,9 @@
 
   set TDSDIR=
 
-  if /i "%~x1" == ".bbx" set TDSDIR=tex\latex\%PACKAGE%\bbx
-  if /i "%~x1" == ".bib" set TDSDIR=doc\latex\%PACKAGE%
-  if /i "%~x1" == ".cbx" set TDSDIR=tex\latex\%PACKAGE%\cbx
+  if /i "%~x1" == ".bbx" set TDSDIR=tex\latex\%PACKAGE%
+  if /i "%~x1" == ".bib" set TDSDIR=bibtex\bib\%PACKAGE%
+  if /i "%~x1" == ".cbx" set TDSDIR=tex\latex\%PACKAGE%
   if /i "%~x1" == ".pdf" set TDSDIR=doc\latex\%PACKAGE%
   if /i "%~x1" == ".tex" set TDSDIR=doc\latex\%PACKAGE%  
 
