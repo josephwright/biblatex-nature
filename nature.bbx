@@ -14,7 +14,119 @@
 \RequireBibliographyStyle{numeric-comp}
 
 % Alter settings that carry through from biblatex
-\ExecuteBibliographyOptions{firstinits,maxnames = 999,maxcitenames = 2}
+\ExecuteBibliographyOptions{
+  firstinits       ,
+  maxnames     = 5 ,
+  maxcitenames = 2 ,
+  useprefix        ,
+}
+
+% Modify the name format
+\DeclareNameFormat{default}{%
+  \usebibmacro{name:last-first}{#1}{#4}{#5}{#7}%
+  \usebibmacro{name:andothers}%
+}
+
+% Custom field formats 
+\DeclareFieldFormat{doi}{%
+  doi\addcolon
+  \ifhyperref
+    {\href{http://dx.doi.org/#1}{\nolinkurl{#1}}}
+    {\nolinkurl{#1}}%
+}
+\DeclareFieldFormat*{pages}{#1}
+\DeclareFieldFormat[article]{title}{#1\adddot}
+\DeclareFieldFormat*{volume}{\mkbibbold{#1}\setpunctfont{\textbf}}
+
+% Simple modifications to punctuation, etc.
+\renewcommand*\finalnamedelim{\addspace\&\addspace}
+
+% Bibliography macros
+\newbibmacro*{journal+issuetitle}{%
+  \usebibmacro{journal}%
+  \setunit*{\addspace}%
+  \iffieldundef{series}
+    {}
+    {%
+      \newunit
+      \printfield{series}%
+      \setunit{\addspace}%
+    }%
+  \printfield{volume}%
+  \newunit
+  \usebibmacro{issue}%
+  \newunit
+}
+  
+\renewbibmacro*{name:last-first}[4]{%
+  \ifuseprefix
+    {%
+      \usebibmacro{name:delim}{#3#1}%
+       \usebibmacro{name:hook}{#3#1}%
+       \ifblank{#3}{}
+         {%
+           \ifcapital
+             {\mkbibnameprefix{\MakeCapital{#3}}\isdot}
+	         {\mkbibnameprefix{#3}\isdot}%
+           \ifpunctmark{'}{}{\addhighpenspace}%
+         }%
+       \mkbibnamelast{#1}\isdot
+       \ifblank{#2}
+         {}{\addcomma\addlowpenspace\mkbibnamefirst{#2}\isdot}%
+       \ifblank{#4}{}{\addlowpenspace\mkbibnameaffix{#4}\isdot}%
+    }
+    {%
+      \usebibmacro{name:delim}{#1}%
+      \usebibmacro{name:hook}{#1}%
+      \mkbibnamelast{#1}\isdot
+      \ifblank{#2#3}{}{\addcomma}%
+      \ifblank{#2}{}{\addlowpenspace\mkbibnamefirst{#2}\isdot}%
+      \ifblank{#3}{}{\addlowpenspace\mkbibnameprefix{#3}\isdot}%
+      \ifblank{#4}{}{\addlowpenspace\mkbibnameaffix{#4}\isdot}%
+    }%
+}
+ 
+% Bibliography macros
+
+\DeclareBibliographyDriver{article}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author/translator+others}%
+  \setunit{\labelnamepunct}\newblock
+  \usebibmacro{title}%
+  \newunit
+  \printlist{language}%
+  \newunit\newblock
+  \usebibmacro{byauthor}%
+  \newunit\newblock
+  \usebibmacro{bytranslator+others}%
+  \newunit\newblock
+  \printfield{version}%
+  \newunit\newblock
+  \usebibmacro{journal+issuetitle}%
+  \newunit
+  \usebibmacro{byeditor+others}%
+  \newunit
+  \usebibmacro{note+pages}%
+  \newunit
+  \iftoggle{bbx:isbn}
+    {\printfield{issn}}
+    {}%
+  \newunit\newblock
+  \iffieldundef{pages}
+    {\usebibmacro{doi+eprint+url}}
+    {}%
+  \setunit{\addspace}\newblock
+  \usebibmacro{issue+date}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}%
+}
+
+% New bibliography drivers, using the required order of fields. These
+% are mainly copied from standard.bbx then modified.
 
 %% 
 %% Copyright (C) 2010,2011 by
