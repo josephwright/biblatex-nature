@@ -57,6 +57,23 @@
   \usebibmacro{issue}%
   \newunit
 }
+
+\renewbibmacro*{name:andothers}{%
+  \ifboolexpr
+    {
+      test {\ifnumequal{\value{listcount}}{\value{liststop}}}
+      and
+      test \ifmorenames
+    }
+    {
+      \ifnumgreater{\value{liststop}}{1}
+        {\finalandcomma}
+        {}%
+      \andothersdelim
+      \mkbibemph{\bibstring{andothers}}%
+    }
+    {}%
+}
   
 \renewbibmacro*{name:last-first}[4]{%
   \ifuseprefix
