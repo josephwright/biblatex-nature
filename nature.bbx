@@ -18,6 +18,7 @@
   firstinits       ,
   maxnames     = 5 ,
   maxcitenames = 2 ,
+  punctfont        ,
   useprefix        ,
 }
 
@@ -36,7 +37,7 @@
 }
 \DeclareFieldFormat*{pages}{#1}
 \DeclareFieldFormat[article]{title}{#1\adddot}
-\DeclareFieldFormat*{volume}{\mkbibbold{#1}\setpunctfont{\textbf}}
+\DeclareFieldFormat*{volume}{\mkbibbold{#1}}
 
 % Simple modifications to punctuation, etc.
 \renewcommand*\finalnamedelim{\addspace\&\addspace}
