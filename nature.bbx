@@ -28,6 +28,9 @@
   \usebibmacro{name:andothers}%
 }
 
+% Field formats for the bibliography environment
+\DeclareFieldFormat{labelnumberwidth}{#1\adddot}
+
 % Custom field formats 
 \DeclareFieldFormat{doi}{%
   doi\addcolon
@@ -42,7 +45,41 @@
 % Simple modifications to punctuation, etc.
 \renewcommand*\finalnamedelim{\addspace\&\addspace}
 
+% Bibliography strings
+\DefineBibliographyStrings{english}{
+  editor  = ed  ,
+  editors = eds ,
+}
+
 % Bibliography macros
+\renewbibmacro*{byeditor+others}{%
+  \ifnameundef{editor}
+    {}
+    {%
+      \printtext[parens]{\usebibmacro{editor}}%
+      \clearname{editor}%
+      \setunit{\addspace}%
+    }%
+  \usebibmacro{byeditorx}%
+  \usebibmacro{bytranslator+others}%
+}
+
+\newbibmacro*{editor}{%
+  \ifboolexpr{
+    test \ifuseeditor
+    and
+    not test {\ifnameundef{editor}}
+  }
+    {%
+      \midsentence
+      \usebibmacro{editorstrg}%
+      \setunit{\addspace}%
+      \printnames{editor}%
+      \clearname{editor}%
+    }
+    {}%
+}
+  
 \newbibmacro*{journal+issuetitle}{%
   \usebibmacro{journal}%
   \setunit*{\addspace}%
@@ -156,17 +193,17 @@
 \DeclareBibliographyDriver{book}{%
   \usebibmacro{bibindex}%
   \usebibmacro{begentry}%
-  \usebibmacro{author/editor+others/translator+others}%
+  \usebibmacro{author/translator+others}%
   \setunit{\labelnamepunct}\newblock
   \usebibmacro{maintitle+title}%
-  \setunit{\addspace}\newblock
+  \setunit{\addspace}%
+  \printfield{edition}%
+  \newunit\newblock
   \printlist{language}%
   \newunit\newblock
   \usebibmacro{byauthor}%
   \newunit\newblock
   \usebibmacro{byeditor+others}%
-  \newunit\newblock
-  \printfield{edition}%
   \newunit
   \iffieldundef{maintitle}
     {%
