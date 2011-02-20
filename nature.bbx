@@ -103,9 +103,9 @@
       \ifblank{#4}{}{\addlowpenspace\mkbibnameaffix{#4}\isdot}%
     }%
 }
- 
-% Bibliography macros
 
+% New bibliography drivers, using the required order of fields. These
+% are mainly copied from standard.bbx then modified.
 \DeclareBibliographyDriver{article}{%
   \usebibmacro{bibindex}%
   \usebibmacro{begentry}%
@@ -142,9 +142,6 @@
   \usebibmacro{pageref}%
   \usebibmacro{finentry}%
 }
-
-% New bibliography drivers, using the required order of fields. These
-% are mainly copied from standard.bbx then modified.
 
 %% 
 %% Copyright (C) 2010,2011 by
