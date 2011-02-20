@@ -36,7 +36,7 @@
     {\nolinkurl{#1}}%
 }
 \DeclareFieldFormat*{pages}{#1}
-\DeclareFieldFormat[article]{title}{#1\adddot}
+\DeclareFieldFormat[article]{title}{#1}
 \DeclareFieldFormat*{volume}{\mkbibbold{#1}}
 
 % Simple modifications to punctuation, etc.
@@ -104,6 +104,16 @@
     }%
 }
 
+\renewbibmacro*{publisher+location+date}{%
+  \printtext[parens]{%                     
+    \printlist{publisher}%
+    \setunit*{\addcomma\space}%
+    \printlist{location}%
+    \setunit*{\addcomma\space}%
+    \usebibmacro{date}%
+  }%
+}
+
 % New bibliography drivers, using the required order of fields. These
 % are mainly copied from standard.bbx then modified.
 \DeclareBibliographyDriver{article}{%
@@ -136,6 +146,52 @@
     {}%
   \setunit{\addspace}\newblock
   \usebibmacro{issue+date}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}%
+}
+
+\DeclareBibliographyDriver{book}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author/editor+others/translator+others}%
+  \setunit{\labelnamepunct}\newblock
+  \usebibmacro{maintitle+title}%
+  \setunit{\addspace}\newblock
+  \printlist{language}%
+  \newunit\newblock
+  \usebibmacro{byauthor}%
+  \newunit\newblock
+  \usebibmacro{byeditor+others}%
+  \newunit\newblock
+  \printfield{edition}%
+  \newunit
+  \iffieldundef{maintitle}
+    {%
+      \printfield{volume}%
+      \printfield{part}%
+    }
+    {}%
+  \newunit
+  \printfield{volumes}%
+  \newunit\newblock
+  \usebibmacro{series+number}%
+  \newunit\newblock
+  \printfield{note}%
+  \newunit\newblock
+  \usebibmacro{chapter+pages}%
+  \newunit
+  \printfield{pagetotal}%
+  \newunit\newblock
+  \iftoggle{bbx:isbn}
+    {\printfield{isbn}}
+    {}%
+  \newunit\newblock
+  \usebibmacro{doi+eprint+url}%
+  \newunit\newblock
+  \usebibmacro{publisher+location+date}%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \setunit{\bibpagerefpunct}\newblock
