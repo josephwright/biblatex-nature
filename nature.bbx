@@ -111,6 +111,22 @@
     {}%
 }
 
+\renewbibmacro*{event+venue+date}{%
+  \printfield{eventtitle}%
+  \ifboolexpr{
+    test {\iffieldundef{venue}}
+    and
+    test {\iffieldundef{eventyear}}
+  }
+    {}
+    {%
+      \printfield{venue}%
+      \setunit*{\addcomma\space}%
+      \printeventdate
+    }%
+  \newunit
+}
+
 \newbibmacro*{in:}{%
   \printtext{\biblcstring{in}\intitlepunct}%
 }
@@ -378,6 +394,47 @@
   \usebibmacro{chapter+pages}%
   \newunit\newblock
   \usebibmacro{publisher+location+date}%
+  \newunit\newblock
+  \iftoggle{bbx:isbn}
+    {\printfield{isbn}}
+    {}%
+  \newunit\newblock
+  \usebibmacro{doi+eprint+url}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}%
+}
+
+\DeclareBibliographyDriver{inproceedings}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author/translator+others}%
+  \setunit{\labelnamepunct}\newblock
+  \printlist{language}%
+  \newunit\newblock
+  \usebibmacro{byauthor}%
+  \newunit\newblock
+  \usebibmacro{in:}%
+  \usebibmacro{maintitle+booktitle}%
+  \newunit\newblock
+  \usebibmacro{event+venue+date}%
+  \newunit\newblock
+  \usebibmacro{byeditor+others}%
+  \newunit\newblock
+  \iffieldundef{maintitle}
+    {\printfield{volume}%
+     \printfield{part}}
+    {}%
+  \newunit
+  \printfield{volumes}%
+  \newunit\newblock
+  \printfield{note}%
+  \newunit\newblock
+  \usebibmacro{publisher+location+date}%
+  \newunit\newblock
+  \usebibmacro{chapter+pages}%
   \newunit\newblock
   \iftoggle{bbx:isbn}
     {\printfield{isbn}}
