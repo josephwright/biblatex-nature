@@ -112,6 +112,7 @@ doc:
 	echo "Compiling documents"
 	for I in $(STYLES) ; do \
 	  pdflatex -draftmode -interaction=batchmode biblatex-$$I &> /dev/null ; \
+	  makeindex -s gglo.ist -o $$I.gls $$I.glo                &> /dev/null ; \
 	  bibtex8 --wolfgang biblatex-$$I                         &> /dev/null ; \
 	  pdflatex -interaction=batchmode biblatex-$$I            &> /dev/null ; \
 	  rm -rf biblatex-$$I-blx.bib ; \
