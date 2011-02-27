@@ -39,6 +39,7 @@
     {\nolinkurl{#1}}%
 }
 \DeclareFieldFormat*{pages}{#1}
+\DeclareFieldFormat*{title}{\mkbibemph{#1}\nopunct}
 \DeclareFieldFormat[article]{title}{#1}
 \DeclareFieldFormat*{volume}{\mkbibbold{#1}}
 
@@ -58,7 +59,7 @@
     {%
       \printtext[parens]{\usebibmacro{editor}}%
       \clearname{editor}%
-      \setunit{\addspace}%
+      \nopunct
     }%
   \usebibmacro{byeditorx}%
   \usebibmacro{bytranslator+others}%
@@ -159,7 +160,7 @@
   \usebibmacro{author/translator+others}%
   \setunit{\labelnamepunct}\newblock
   \usebibmacro{title}%
-  \newunit
+  \newblock
   \printlist{language}%
   \newunit\newblock
   \usebibmacro{byauthor}%
