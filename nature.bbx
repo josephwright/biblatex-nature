@@ -44,6 +44,12 @@
 \DeclareFieldFormat*{series}{\mkbibemph{#1}\nopunct}
 \DeclareFieldFormat*{title}{\mkbibemph{#1}\nopunct}
 \DeclareFieldFormat[article]{title}{#1}
+\DeclareFieldFormat[patent]{type}{%
+  \mkbibemph{%
+    \ifbibstring{#1}{\bibstring{#1}}{#1}%
+  }%
+}
+\DeclareFieldFormat{url}{<\url{#1}>}
 \DeclareFieldFormat*{volume}{\mkbibbold{#1}}
 \DeclareFieldFormat[book]{volume}{#1}
 
@@ -53,8 +59,9 @@
 
 % Bibliography strings
 \DefineBibliographyStrings{english}{
-  editor  = ed  ,
-  editors = eds ,
+  editor   = ed        ,
+  editors  = eds       ,
+  patentus = US Patent ,
 }
 
 % Bibliography macros
@@ -129,6 +136,34 @@
 
 \newbibmacro*{in:}{%
   \printtext{\biblcstring{in}\intitlepunct}%
+}
+
+\renewbibmacro*{institution+location+date}{%
+  \nopunct
+  \printtext[parens]{%                     
+    \printlist{institution}%
+    \setunit*{\addcomma\space}%
+    \printlist{location}%
+    \setunit*{\addcomma\space}%
+    \usebibmacro{date}%
+  }%
+}
+
+\renewbibmacro*{issue+date}{%
+  \iffieldundef{year}
+    {}
+    {%
+      \iffieldundef{issue}
+        {\printtext[parens]{\usebibmacro{date}}}
+        {%
+          \printtext[parens]{%
+            \printfield{issue}%
+            \setunit*{\addspace}%
+            \usebibmacro{date}%
+          }%
+        }%
+    }%
+  \newunit  
 }
   
 \newbibmacro*{journal+issuetitle}{%
@@ -212,6 +247,13 @@
       \printfield{number}%
       \newunit
     }%
+}
+
+\newbibmacro*{title+volume}{%
+  \printfield{title}%
+  \setunit*{\addspace}%
+  \printfield{volume}%
+  \newunit
 }
 
 % New bibliography drivers, using the required order of fields. These
@@ -441,6 +483,113 @@
     {}%
   \newunit\newblock
   \usebibmacro{doi+eprint+url}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}%
+}
+
+\DeclareBibliographyDriver{online}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author/editor+others/translator+others}%
+  \setunit{\labelnamepunct}\newblock
+  \usebibmacro{title}%
+  \newunit
+  \printlist{language}%
+  \newunit\newblock
+  \usebibmacro{byauthor}%
+  \newunit\newblock
+  \usebibmacro{byeditor+others}%
+  \newunit\newblock
+  \printfield{version}%
+  \newunit
+  \printfield{note}%
+  \newunit\newblock
+  \printlist{organization}%
+  \newunit\newblock
+  \iftoggle{bbx:eprint}
+    {\usebibmacro{eprint}}
+    {}%
+  \newunit\newblock
+  \printfield{url}
+  \setunit*{\addspace}%
+  \iffieldundef{year}
+    {\printfield[parens]{urlyear}}
+    {\printfield[parens]{year}}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}%
+}
+
+\DeclareBibliographyDriver{patent}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \setunit{\labelnamepunct}\newblock
+  \nopunct
+  \printlist{language}%
+  \newunit\newblock
+  \usebibmacro{byauthor}%
+  \newunit\newblock
+  \printfield{type}%
+  \setunit*{\addspace}%
+  \printfield{number}%
+  \iflistundef{location}
+    {}
+    {\setunit*{\addspace}%
+     \printtext[parens]{%
+       \printlist[][-\value{listtotal}]{location}}}%
+  \newunit\newblock
+  \printfield{note}%
+  \newunit\newblock
+  \usebibmacro{doi+eprint+url}%
+  \nopunct
+  \printfield[parens]{year}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}%
+}
+
+\DeclareBibliographyDriver{periodical}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author/translator+others}%
+  \setunit{\labelnamepunct}\newblock
+  \printfield{issuetitle}%
+  \setunit{\addspace}%
+  \printfield{edition}%
+  \newunit\newblock
+  \printlist{language}%
+  \newunit\newblock
+  \usebibmacro{byauthor}%
+  \newunit\newblock
+  \usebibmacro{byeditor+others}%
+  \newunit
+  \printfield{volumes}%
+  \newunit\newblock
+  \usebibmacro{title+volume}%
+  \newunit\newblock
+  \printfield{note}%
+  \newunit\newblock
+  \usebibmacro{chapter+pages}%
+  \newunit\newblock
+  \printfield{pagetotal}%
+  \newunit\newblock
+  \iftoggle{bbx:isbn}
+    {\printfield{isbn}}
+    {}%
+  \newunit\newblock
+  \iffieldundef{year}
+    {\usebibmacro{doi+eprint+url}}
+    {}%
+  \newunit\newblock
+  \usebibmacro{publisher+location+date}%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \setunit{\bibpagerefpunct}\newblock
