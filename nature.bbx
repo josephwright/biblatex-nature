@@ -32,6 +32,7 @@
 \DeclareFieldFormat{labelnumberwidth}{#1\adddot}
 
 % Custom field formats 
+\DeclareFieldFormat*{booktitle}{\mkbibemph{#1}\nopunct}
 \DeclareFieldFormat{doi}{%
   doi\addcolon
   \ifhyperref
@@ -39,6 +40,7 @@
     {\nolinkurl{#1}}%
 }
 \DeclareFieldFormat*{pages}{#1}
+\DeclareFieldFormat[book,collection]{number}{\mkbibbold{#1}}
 \DeclareFieldFormat*{series}{\mkbibemph{#1}\nopunct}
 \DeclareFieldFormat*{title}{\mkbibemph{#1}\nopunct}
 \DeclareFieldFormat[article]{title}{#1}
@@ -47,6 +49,7 @@
 
 % Simple modifications to punctuation, etc.
 \renewcommand*\finalnamedelim{\addspace\&\addspace}
+\renewcommand*\intitlepunct{\addspace}
 
 % Bibliography strings
 \DefineBibliographyStrings{english}{
@@ -59,12 +62,22 @@
   \ifnameundef{editor}
     {}
     {%
+      \nopunct
       \printtext[parens]{\usebibmacro{editor}}%
       \clearname{editor}%
       \nopunct
     }%
   \usebibmacro{byeditorx}%
   \usebibmacro{bytranslator+others}%
+}
+
+\renewbibmacro*{chapter+pages}{%
+  \iffieldundef{pages}
+    {\printfield{chapter}}
+    {}%
+  \setunit{\bibpagespunct}%
+  \printfield{pages}%
+  \newunit
 }
 
 \newbibmacro*{editor}{%
@@ -81,6 +94,25 @@
       \clearname{editor}%
     }
     {}%
+}
+
+\newbibmacro*{editor+others}{%
+  \ifboolexpr{
+    test \ifuseeditor
+    and
+    not test {\ifnameundef{editor}}
+  }
+    {%
+      \nopunct
+      \printtext[parens]{\usebibmacro{editor}}
+      \clearname{editor}%
+      \nopunct
+    }
+    {}%
+}
+
+\newbibmacro*{in:}{%
+  \printtext{\biblcstring{in}\intitlepunct}%
 }
   
 \newbibmacro*{journal+issuetitle}{%
@@ -145,6 +177,7 @@
 }
 
 \renewbibmacro*{publisher+location+date}{%
+  \nopunct
   \printtext[parens]{%                     
     \printlist{publisher}%
     \setunit*{\addcomma\space}%
@@ -152,6 +185,17 @@
     \setunit*{\addcomma\space}%
     \usebibmacro{date}%
   }%
+}
+
+\renewbibmacro*{series+number}{%
+  \iffieldundef{number}
+    {}
+    {%
+      \printfield{series}%
+      \setunit*{\addspace}%
+      \printfield{number}%
+      \newunit
+    }%
 }
 
 % New bibliography drivers, using the required order of fields. These
@@ -215,7 +259,7 @@
   \printfield{note}%
   \newunit\newblock
   \usebibmacro{chapter+pages}%
-  \newunit
+  \newunit\newblock
   \printfield{pagetotal}%
   \newunit\newblock
   \iftoggle{bbx:isbn}
@@ -225,6 +269,121 @@
   \usebibmacro{doi+eprint+url}%
   \newunit\newblock
   \usebibmacro{publisher+location+date}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}%
+}
+
+\DeclareBibliographyDriver{collection}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{maintitle+title}%
+  \newunit
+  \usebibmacro{editor+others}%
+  \setunit{\labelnamepunct}\newblock
+  \printlist{language}%
+  \newunit\newblock
+  \usebibmacro{byeditor+others}%
+  \newunit\newblock
+  \printfield{edition}%
+  \newunit
+  \printfield{volumes}%
+  \newunit\newblock
+  \usebibmacro{series+number}%
+  \newunit\newblock
+  \printfield{note}%
+  \newunit\newblock
+  \usebibmacro{chapter+pages}%
+  \newunit
+  \usebibmacro{publisher+location+date}%
+  \newunit\newblock
+  \printfield{pagetotal}%
+  \newunit\newblock
+  \iftoggle{bbx:isbn}
+    {\printfield{isbn}}
+    {}%
+  \newunit\newblock
+  \usebibmacro{doi+eprint+url}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}%
+}
+
+\DeclareBibliographyDriver{inbook}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author/translator+others}%
+  \setunit{\labelnamepunct}\newblock
+  \printlist{language}%
+  \newunit\newblock
+  \usebibmacro{byauthor}%
+  \newunit\newblock
+  \usebibmacro{in:}%
+  \usebibmacro{bybookauthor}%
+  \newunit\newblock
+  \usebibmacro{maintitle+booktitle}%
+  \newunit\newblock
+  \usebibmacro{byeditor+others}%
+  \newunit\newblock
+  \printfield{edition}%
+  \newunit
+  \printfield{volumes}%
+  \newunit\newblock
+  \usebibmacro{series+number}%
+  \newunit\newblock
+  \printfield{note}%
+  \newunit\newblock
+  \usebibmacro{chapter+pages}%
+  \newunit\newblock
+  \usebibmacro{publisher+location+date}%
+  \newunit\newblock
+  \iftoggle{bbx:isbn}
+    {\printfield{isbn}}
+    {}%
+  \newunit\newblock
+  \usebibmacro{doi+eprint+url}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \usebibmacro{finentry}%
+}
+
+\DeclareBibliographyDriver{incollection}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author/translator+others}%
+  \setunit{\labelnamepunct}\newblock
+  \printlist{language}%
+  \newunit\newblock
+  \usebibmacro{byauthor}%
+  \newunit\newblock
+  \usebibmacro{in:}%
+  \usebibmacro{maintitle+booktitle}%
+  \newunit\newblock
+  \usebibmacro{byeditor+others}%
+  \newunit\newblock
+  \printfield{edition}%
+  \newunit
+  \printfield{volumes}%
+  \newunit\newblock
+  \usebibmacro{series+number}%
+  \newunit\newblock
+  \printfield{note}%
+  \newunit\newblock
+  \usebibmacro{chapter+pages}%
+  \newunit\newblock
+  \usebibmacro{publisher+location+date}%
+  \newunit\newblock
+  \iftoggle{bbx:isbn}
+    {\printfield{isbn}}
+    {}%
+  \newunit\newblock
+  \usebibmacro{doi+eprint+url}%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \setunit{\bibpagerefpunct}\newblock
