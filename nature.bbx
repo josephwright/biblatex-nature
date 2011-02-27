@@ -39,9 +39,11 @@
     {\nolinkurl{#1}}%
 }
 \DeclareFieldFormat*{pages}{#1}
+\DeclareFieldFormat*{series}{\mkbibemph{#1}\nopunct}
 \DeclareFieldFormat*{title}{\mkbibemph{#1}\nopunct}
 \DeclareFieldFormat[article]{title}{#1}
 \DeclareFieldFormat*{volume}{\mkbibbold{#1}}
+\DeclareFieldFormat[book]{volume}{#1}
 
 % Simple modifications to punctuation, etc.
 \renewcommand*\finalnamedelim{\addspace\&\addspace}
@@ -205,13 +207,6 @@
   \usebibmacro{byauthor}%
   \newunit\newblock
   \usebibmacro{byeditor+others}%
-  \newunit
-  \iffieldundef{maintitle}
-    {%
-      \printfield{volume}%
-      \printfield{part}%
-    }
-    {}%
   \newunit
   \printfield{volumes}%
   \newunit\newblock
