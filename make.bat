@@ -22,11 +22,11 @@
 
   rem Master package name 
 
-  set PACKAGE=biblatex-ieee
+  set PACKAGE=biblatex-nature
 
   rem The biblatex styles included
 
-  set STYLES=ieee
+  set STYLES=nature
 
   rem The file types for inclusion in the archive files: note that a CTAN
   rem archive should not contain "unpacked" files. Typeset files and their
