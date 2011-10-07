@@ -140,7 +140,7 @@ tds: doc
 	for I in $(STYLES) ; do \
 	  cp $$I.bbx tds/tex/$(TDS)/ ; \
 	  cp $$I.cbx tds/tex/$(TDS)/ ; \
-	  cp biblatex-$$I.bib tds/bibtex/bib/$(PACKAGE)/ ; \
+	  cp biblatex-$$I.bib tds/doc/$(TDS)/ ; \
 	  cp biblatex-$$I.pdf tds/doc/$(TDS)/ ; \
 	  cp biblatex-$$I.tex tds/doc/$(TDS)/ ; \
 	done
