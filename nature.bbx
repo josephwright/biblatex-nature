@@ -94,7 +94,7 @@
   \newunit
 }
 
-\newbibmacro*{editor}{%
+\renewbibmacro*{editor}{%
   \ifboolexpr{
     test \ifuseeditor
     and
@@ -110,7 +110,7 @@
     {}%
 }
 
-\newbibmacro*{editor+others}{%
+\renewbibmacro*{editor+others}{%
   \ifboolexpr{
     test \ifuseeditor
     and
@@ -141,7 +141,7 @@
   \newunit
 }
 
-\newbibmacro*{in:}{%
+\renewbibmacro*{in:}{%
   \printtext{\biblcstring{in}\intitlepunct}%
 }
 
@@ -173,7 +173,7 @@
   \newunit  
 }
   
-\newbibmacro*{journal+issuetitle}{%
+\renewbibmacro*{journal+issuetitle}{%
   \usebibmacro{journal}%
   \setunit*{\addspace}%
   \iffieldundef{series}
