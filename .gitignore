@@ -3,6 +3,7 @@
 *.alg
 *.aux
 *.bbl
+*-blx.bib
 *.blg
 *.dvi
 *.fdb_latexmk
@@ -31,4 +32,5 @@
 *.toc
 *.vrb
 *.xdy
+*.xml
 *.zip
