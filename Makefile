@@ -142,7 +142,7 @@ tds: doc
 	  cp biblatex-$$I.pdf tds/doc/$(TDS)/ ; \
 	  cp biblatex-$$I.tex tds/doc/$(TDS)/ ; \
 	done
-	cp README tds/doc/$(TDS)/README
+	cp README.md tds/doc/$(TDS)/README
 	cd tds ; \
 	zip -ll -q -r -X ../$(PACKAGE).tds.zip .
 	rm -rf tds
