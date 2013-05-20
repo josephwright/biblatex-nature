@@ -475,6 +475,12 @@
   \usebibmacro{begentry}%
   \usebibmacro{author/translator+others}%
   \setunit{\labelnamepunct}\newblock
+  \iftoggle{bbx:articletitle}
+    {%
+      \usebibmacro{title}%
+      \newblock
+    }
+    {}%
   \printlist{language}%
   \newunit\newblock
   \usebibmacro{byauthor}%
