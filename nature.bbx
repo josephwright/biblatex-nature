@@ -22,7 +22,7 @@
 % Alter settings that carry through from biblatex
 \ExecuteBibliographyOptions{
   articletitle     ,
-  firstinits       ,
+  giveninits       ,
   maxnames     = 5 ,
   maxcitenames = 2 ,
   punctfont        ,
@@ -31,7 +31,12 @@
 
 % Modify the name format
 \DeclareNameFormat{default}{%
-  \usebibmacro{name:last-first}{#1}{#4}{#5}{#7}%
+  \nameparts{#1}%
+  \usebibmacro{name:family-given}
+    {\namepartfamily}
+    {\namepartgiveni}
+    {\namepartprefix}
+    {\namepartsuffix}%
   \usebibmacro{name:andothers}%
 }
 
