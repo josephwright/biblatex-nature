@@ -30,15 +30,24 @@
 }
 
 % Modify the name format
-\DeclareNameFormat{default}{%
-  \nameparts{#1}%
-  \usebibmacro{name:family-given}
-    {\namepartfamily}
-    {\namepartgiveni}
-    {\namepartprefix}
-    {\namepartsuffix}%
-  \usebibmacro{name:andothers}%
-}
+\@ifpackageloaded{biblatex_legacy}
+  {
+    \DeclareNameFormat{default}{%
+      \usebibmacro{name:last-first}{#1}{#4}{#5}{#7}%
+     \usebibmacro{name:andothers}%
+    }
+  }
+  {
+    \DeclareNameFormat{default}{%
+      \nameparts{#1}%
+      \usebibmacro{name:family-given}
+        {\namepartfamily}
+        {\namepartgiveni}
+        {\namepartprefix}
+        {\namepartsuffix}%
+     \usebibmacro{name:andothers}%
+    }
+  }
 
 % Field formats for the bibliography environment
 \DeclareFieldFormat{labelnumberwidth}{#1\adddot}
