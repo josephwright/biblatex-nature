@@ -21,12 +21,13 @@
 
 % Alter settings that carry through from biblatex
 \ExecuteBibliographyOptions{
-  articletitle     ,
-  giveninits       ,
-  maxnames     = 5 ,
-  maxcitenames = 2 ,
-  punctfont        ,
-  useprefix
+  articletitle        ,
+  giveninits          ,
+  maxnames     = 5    ,
+  maxcitenames = 2    ,
+  punctfont           ,
+  urldate      = year ,
+  useprefix           ,
 }
 
 % Modify the name format
@@ -71,6 +72,7 @@
   }%
 }
 \DeclareFieldFormat{url}{\textless\url{#1}\textgreater}
+\DeclareFieldFormat{urldate}{\mkbibparens{#1}}
 \DeclareFieldFormat*{volume}{\mkbibbold{#1}}
 \DeclareFieldFormat[book]{volume}{#1}
 
@@ -556,11 +558,7 @@
     {\usebibmacro{eprint}}
     {}%
   \newunit\newblock
-  \printfield{url}
-  \setunit*{\addspace}%
-  \iffieldundef{year}
-    {\printfield[parens]{urlyear}}
-    {\printfield[parens]{year}}%
+  \usebibmacro{url+urldate}%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \setunit{\bibpagerefpunct}\newblock
