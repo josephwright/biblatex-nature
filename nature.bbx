@@ -18,6 +18,10 @@
 \DeclareBibliographyOption{articletitle}[true]{%
   \settoggle{bbx:articletitle}{#1}%
 }
+\newtoggle{bbx:intitle}
+\DeclareBibliographyOption{intitle}[false]{%
+  \settoggle{bbx:intitle}{#1}%
+}
 
 \@ifpackagelater{biblatex}{2016/03/27}
 {%
@@ -428,6 +432,12 @@
   \newunit\newblock
   \usebibmacro{byauthor}%
   \newunit\newblock
+  \iftoggle{bbx:intitle}
+    {%
+      \usebibmacro{title}%
+      \newblock
+    }
+    {}%
   \usebibmacro{in:}%
   \usebibmacro{bybookauthor}%
   \setunit*{\newunitpunct}\newblock
@@ -470,6 +480,12 @@
   \newunit\newblock
   \usebibmacro{byauthor}%
   \newunit\newblock
+  \iftoggle{bbx:intitle}
+    {%
+      \usebibmacro{title}%
+      \newblock
+    }
+    {}%
   \usebibmacro{in:}%
   \usebibmacro{maintitle+booktitle}%
   \newunit\newblock
