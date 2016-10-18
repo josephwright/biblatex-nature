@@ -19,25 +19,34 @@
   \settoggle{bbx:articletitle}{#1}%
 }
 
-% Alter settings that carry through from biblatex
-\ExecuteBibliographyOptions{
-  articletitle        ,
-  giveninits          ,
-  maxnames     = 5    ,
-  maxcitenames = 2    ,
-  punctfont           ,
-  urldate      = year ,
-  useprefix           ,
+\@ifpackagelater{biblatex}{2016/03/27}
+{%
+  % Alter settings that carry through from biblatex
+  \ExecuteBibliographyOptions{
+    articletitle        ,
+    giveninits          ,
+    maxnames     = 5    ,
+    maxcitenames = 2    ,
+    punctfont           ,
+    urldate      = year ,
+    useprefix           ,
+  }
 }
+{%
+  % Alter settings that carry through from biblatex
+  \ExecuteBibliographyOptions{
+    articletitle        ,
+    firstinits          ,
+    maxnames     = 5    ,
+    maxcitenames = 2    ,
+    punctfont           ,
+    urldate      = year ,
+    useprefix           ,
+  }
+}%
 
 % Modify the name format
-\@ifpackageloaded{biblatex_legacy}
-  {
-    \DeclareNameFormat{default}{%
-      \usebibmacro{name:last-first}{#1}{#4}{#5}{#7}%
-     \usebibmacro{name:andothers}%
-    }
-  }
+\@ifpackagelater{biblatex}{2016/03/27}
   {
     \DeclareNameFormat{default}{%
       \nameparts{#1}%
@@ -47,6 +56,12 @@
         {\namepartprefix}
         {\namepartsuffix}%
      \usebibmacro{name:andothers}%
+    }
+  }
+  {
+    \DeclareNameFormat{default}{%
+      \usebibmacro{name:last-first}{#1}{#4}{#5}{#7}%
+      \usebibmacro{name:andothers}%
     }
   }
 
