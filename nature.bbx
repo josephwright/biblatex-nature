@@ -23,31 +23,19 @@
   \settoggle{bbx:intitle}{#1}%
 }
 
-\@ifpackagelater{biblatex}{2016/03/27}
-{%
-  % Alter settings that carry through from biblatex
-  \ExecuteBibliographyOptions{
-    articletitle        ,
-    giveninits          ,
-    maxnames     = 5    ,
-    maxcitenames = 2    ,
-    punctfont           ,
-    urldate      = year ,
-    useprefix           ,
-  }
+\ExecuteBibliographyOptions{
+  articletitle        ,
+  giveninits          ,
+  maxnames     = 5    ,
+  maxcitenames = 2    ,
+  punctfont           ,
+  urldate      = year ,
+  useprefix           ,
 }
-{%
-  % Alter settings that carry through from biblatex
-  \ExecuteBibliographyOptions{
-    articletitle        ,
-    firstinits          ,
-    maxnames     = 5    ,
-    maxcitenames = 2    ,
-    punctfont           ,
-    urldate      = year ,
-    useprefix           ,
-  }
-}%
+
+\@ifpackagelater{biblatex}{2016/03/27}
+  {\ExecuteBibliographyOptions{giveninits}}
+  {\ExecuteBibliographyOptions{firstinits}}
 
 % Modify the name format
 \@ifpackagelater{biblatex}{2016/03/27}
