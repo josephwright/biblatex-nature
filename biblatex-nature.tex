@@ -54,6 +54,11 @@ standard articles in \emph{Nature} use these but \emph{Letters to the Editor}
 do not. To control this behaviour, the boolean option \opt{articletitle}
 is provided; this is set \opt{true} as standard.
 
+\DescribeOption{intitl}
+The boolean option \opt{intitle} determines whether the title of books
+is printed for \texttt{inbook} and \texttt{incollection} entries. It is
+set \opt{false} as standard.
+
 Suggestions for improvement and bug reports can be logged in the package
 issue database, found at
 \url{https://github.com/josephwright/biblatex-nature/issues}, or can
@@ -84,6 +89,7 @@ be sent by e-mail to
 \changes{v1.2f}{2016/03/10}{Track \pkg{biblatex} changes}
 \changes{v1.2g}{2016/03/13}{Ensure style works with both backends}
 \changes{v1.2h}{2016/09/13}{Work properly with \texttt{urldate} option}
+\changes{v1.3}{2016/10/22}{New \opt{intitle} option}
 
 \PrintChanges
 
