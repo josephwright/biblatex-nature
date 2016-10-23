@@ -18,26 +18,39 @@
 \DeclareBibliographyOption{articletitle}[true]{%
   \settoggle{bbx:articletitle}{#1}%
 }
-
-% Alter settings that carry through from biblatex
-\ExecuteBibliographyOptions{
-  articletitle        ,
-  giveninits          ,
-  maxnames     = 5    ,
-  maxcitenames = 2    ,
-  punctfont           ,
-  urldate      = year ,
-  useprefix           ,
+\newtoggle{bbx:intitle}
+\DeclareBibliographyOption{intitle}[false]{%
+  \settoggle{bbx:intitle}{#1}%
 }
 
-% Modify the name format
-\@ifpackageloaded{biblatex_legacy}
-  {
-    \DeclareNameFormat{default}{%
-      \usebibmacro{name:last-first}{#1}{#4}{#5}{#7}%
-     \usebibmacro{name:andothers}%
-    }
+\@ifpackagelater{biblatex}{2016/03/27}
+{%
+  % Alter settings that carry through from biblatex
+  \ExecuteBibliographyOptions{
+    articletitle        ,
+    giveninits          ,
+    maxnames     = 5    ,
+    maxcitenames = 2    ,
+    punctfont           ,
+    urldate      = year ,
+    useprefix           ,
   }
+}
+{%
+  % Alter settings that carry through from biblatex
+  \ExecuteBibliographyOptions{
+    articletitle        ,
+    firstinits          ,
+    maxnames     = 5    ,
+    maxcitenames = 2    ,
+    punctfont           ,
+    urldate      = year ,
+    useprefix           ,
+  }
+}%
+
+% Modify the name format
+\@ifpackagelater{biblatex}{2016/03/27}
   {
     \DeclareNameFormat{default}{%
       \nameparts{#1}%
@@ -47,6 +60,12 @@
         {\namepartprefix}
         {\namepartsuffix}%
      \usebibmacro{name:andothers}%
+    }
+  }
+  {
+    \DeclareNameFormat{default}{%
+      \usebibmacro{name:last-first}{#1}{#4}{#5}{#7}%
+      \usebibmacro{name:andothers}%
     }
   }
 
@@ -413,6 +432,12 @@
   \newunit\newblock
   \usebibmacro{byauthor}%
   \newunit\newblock
+  \iftoggle{bbx:intitle}
+    {%
+      \usebibmacro{title}%
+      \newblock
+    }
+    {}%
   \usebibmacro{in:}%
   \usebibmacro{bybookauthor}%
   \setunit*{\newunitpunct}\newblock
@@ -455,6 +480,12 @@
   \newunit\newblock
   \usebibmacro{byauthor}%
   \newunit\newblock
+  \iftoggle{bbx:intitle}
+    {%
+      \usebibmacro{title}%
+      \newblock
+    }
+    {}%
   \usebibmacro{in:}%
   \usebibmacro{maintitle+booktitle}%
   \newunit\newblock
