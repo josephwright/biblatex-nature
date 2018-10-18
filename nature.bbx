@@ -24,13 +24,14 @@
 }
 
 \ExecuteBibliographyOptions{
-  articletitle        ,
-  giveninits          ,
-  maxnames     = 5    ,
-  maxcitenames = 2    ,
-  punctfont           ,
-  urldate      = year ,
-  useprefix           ,
+  articletitle         ,
+  doi          = false ,
+  giveninits           ,
+  maxnames     = 5     ,
+  maxcitenames = 2     ,
+  punctfont            ,
+  urldate      = year  ,
+  useprefix            ,
 }
 
 \@ifpackagelater{biblatex}{2016/03/27}
@@ -317,9 +318,7 @@
     {\printfield{issn}}
     {}%
   \newunit\newblock
-  \iffieldundef{pages}
-    {\usebibmacro{doi+eprint+url}}
-    {}%
+  \usebibmacro{doi+eprint+url}%
   \setunit{\addspace}\newblock
   \usebibmacro{issue+date}%
   \newunit\newblock
