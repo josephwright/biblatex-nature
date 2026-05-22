@@ -8,7 +8,7 @@
 %% ---------------------------------------------------------------
 %% 
 
-\ProvidesFile{nature.bbx}[2026/04/21 v1.3e biblatex bibliography style]
+\ProvidesFile{nature.bbx}[2026-04-21 v1.3e biblatex bibliography style]
 
 % Load the standard style to avoid copy-pasting unnecessary material
 \RequireBibliographyStyle{numeric-comp}
@@ -34,12 +34,12 @@
   useprefix            ,
 }
 
-\@ifpackagelater{biblatex}{2016/03/27}
+\@ifpackagelater{biblatex}{2016-03-27}
   {\ExecuteBibliographyOptions{giveninits}}
   {\ExecuteBibliographyOptions{firstinits}}
 
 % Modify the name format
-\@ifpackagelater{biblatex}{2016/03/27}
+\@ifpackagelater{biblatex}{2016-03-27}
   {
     \DeclareNameFormat{default}{%
       \nameparts{#1}%
